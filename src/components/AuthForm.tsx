@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Github, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -19,29 +20,50 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // In a real app, you would connect this to your authentication system
-    // For now, we'll simulate a successful login/signup
-    if (type === "login") {
-      console.log("Logging in:", email);
-      
+    try {
+      if (type === "login") {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Logged in successfully",
+          description: "Welcome back to DataComp!",
+        });
+        
+        navigate("/challenges");
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name,
+            },
+          },
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Account created successfully",
+          description: "Welcome to DataComp!",
+        });
+        
+        navigate("/challenges");
+      }
+    } catch (error: any) {
       toast({
-        title: "Logged in successfully",
-        description: "Welcome back to DataComp!",
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
       });
-      
-      navigate("/challenges");
-    } else {
-      console.log("Signing up:", { name, email });
-      
-      toast({
-        title: "Account created successfully",
-        description: "Welcome to DataComp!",
-      });
-      
-      navigate("/challenges");
     }
   };
 

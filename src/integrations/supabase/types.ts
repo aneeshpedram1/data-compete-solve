@@ -9,16 +9,156 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          file_type: string
+          file_url: string
+          id: string
+          instance_id: string
+          uploaded_at: string
+        }
+        Insert: {
+          file_type: string
+          file_url: string
+          id?: string
+          instance_id: string
+          uploaded_at?: string
+        }
+        Update: {
+          file_type?: string
+          file_url?: string
+          id?: string
+          instance_id?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_instance_id_fkey"
+            columns: ["instance_id"]
+            isOneToOne: false
+            referencedRelation: "task_instances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_instances: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          status: Database["public"]["Enums"]["task_status"]
+          submission_time: string | null
+          task_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          status?: Database["public"]["Enums"]["task_status"]
+          submission_time?: string | null
+          task_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          status?: Database["public"]["Enums"]["task_status"]
+          submission_time?: string | null
+          task_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_instances_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          created_by: string
+          dataset_url: string | null
+          description: string
+          difficulty: Database["public"]["Enums"]["task_difficulty"] | null
+          id: string
+          timer_duration: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          dataset_url?: string | null
+          description: string
+          difficulty?: Database["public"]["Enums"]["task_difficulty"] | null
+          id?: string
+          timer_duration: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          dataset_url?: string | null
+          description?: string
+          difficulty?: Database["public"]["Enums"]["task_difficulty"] | null
+          id?: string
+          timer_duration?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      task_difficulty: "beginner" | "intermediate" | "advanced"
+      task_status: "in_progress" | "completed" | "out_of_time" | "not_completed"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +273,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      task_difficulty: ["beginner", "intermediate", "advanced"],
+      task_status: ["in_progress", "completed", "out_of_time", "not_completed"],
+      user_role: ["admin", "user"],
+    },
   },
 } as const
