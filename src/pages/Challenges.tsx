@@ -152,7 +152,7 @@ const Challenges = () => {
                 <SelectItem value="all">All Durations</SelectItem>
                 <SelectItem value="short">Short (≤ 60 min)</SelectItem>
                 <SelectItem value="medium">Medium (61-90 min)</SelectItem>
-                <SelectItem value="long">Long (> 90 min)</SelectItem>
+                <SelectItem value="long">Long (&gt; 90 min)</SelectItem>
               </SelectContent>
             </Select>
           </div>
