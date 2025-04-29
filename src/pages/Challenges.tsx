@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ChallengeCard, { ChallengeProps } from "@/components/ChallengeCard";
@@ -7,91 +8,52 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
-// Sample challenges data
-const challengesData: ChallengeProps[] = [
-  {
-    id: "1",
-    title: "Customer Churn Analysis",
-    description: "Analyze customer data to identify key factors contributing to churn. Create visualizations to present your findings.",
-    difficulty: "Beginner",
-    duration: 60,
-    participants: 324
-  },
-  {
-    id: "2",
-    title: "Sales Forecasting",
-    description: "Use historical sales data to forecast future sales. Identify seasonal patterns and trends.",
-    difficulty: "Intermediate",
-    duration: 90,
-    participants: 218
-  },
-  {
-    id: "3",
-    title: "Health Outcomes Prediction",
-    description: "Analyze patient data and identify risk factors for specific health conditions.",
-    difficulty: "Advanced",
-    duration: 120,
-    participants: 156
-  },
-  {
-    id: "4",
-    title: "Marketing Campaign Analysis",
-    description: "Evaluate the effectiveness of different marketing campaigns and identify the best-performing channels.",
-    difficulty: "Beginner",
-    duration: 45,
-    participants: 287
-  },
-  {
-    id: "5",
-    title: "Supply Chain Optimization",
-    description: "Analyze supply chain data to identify bottlenecks and suggest improvements.",
-    difficulty: "Intermediate",
-    duration: 75,
-    participants: 189
-  },
-  {
-    id: "6",
-    title: "Financial Fraud Detection",
-    description: "Identify patterns in transaction data that might indicate fraudulent activity.",
-    difficulty: "Advanced",
-    duration: 120,
-    participants: 143
-  },
-  {
-    id: "7",
-    title: "Customer Segmentation",
-    description: "Segment customers based on their purchasing behavior and demographics.",
-    difficulty: "Intermediate",
-    duration: 90,
-    participants: 231
-  },
-  {
-    id: "8",
-    title: "Product Recommendation Analysis",
-    description: "Analyze purchase history to create product recommendations for customers.",
-    difficulty: "Beginner",
-    duration: 60,
-    participants: 298
-  },
-  {
-    id: "9",
-    title: "Pricing Strategy Optimization",
-    description: "Analyze sales data to determine optimal pricing strategies for different products.",
-    difficulty: "Advanced",
-    duration: 105,
-    participants: 125
+const fetchChallenges = async () => {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*");
+  
+  if (error) {
+    throw error;
   }
-];
+  
+  return data.map(task => ({
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    difficulty: task.difficulty === "beginner" ? "Beginner" : 
+               task.difficulty === "intermediate" ? "Intermediate" : "Advanced",
+    duration: task.timer_duration,
+    // For now, we'll use a random number for participants until we implement that feature
+    participants: Math.floor(Math.random() * 300) + 100
+  }));
+};
 
 const Challenges = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
   const [durationFilter, setDurationFilter] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("all");
+  const { toast } = useToast();
+  
+  const { data: challenges = [], isLoading, isError } = useQuery({
+    queryKey: ["challenges"],
+    queryFn: fetchChallenges,
+    onError: (error) => {
+      console.error("Failed to fetch challenges:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load challenges. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  });
 
   // Filter challenges based on search query and filters
-  const filteredChallenges = challengesData.filter((challenge) => {
+  const filteredChallenges = challenges.filter((challenge) => {
     const matchesSearch = challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          challenge.description.toLowerCase().includes(searchQuery.toLowerCase());
     
@@ -167,7 +129,15 @@ const Challenges = () => {
             </TabsList>
             
             <TabsContent value="all" className="pt-6">
-              {filteredChallenges.length > 0 ? (
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Loading challenges...</p>
+                </div>
+              ) : isError ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Failed to load challenges. Please try again later.</p>
+                </div>
+              ) : filteredChallenges.length > 0 ? (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredChallenges.map((challenge) => (
                     <ChallengeCard key={challenge.id} {...challenge} />
@@ -181,26 +151,38 @@ const Challenges = () => {
             </TabsContent>
             
             <TabsContent value="popular" className="pt-6">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredChallenges
-                  .sort((a, b) => b.participants - a.participants)
-                  .slice(0, 6)
-                  .map((challenge) => (
-                    <ChallengeCard key={challenge.id} {...challenge} />
-                  ))}
-              </div>
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Loading challenges...</p>
+                </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredChallenges
+                    .sort((a, b) => b.participants - a.participants)
+                    .slice(0, 6)
+                    .map((challenge) => (
+                      <ChallengeCard key={challenge.id} {...challenge} />
+                    ))}
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="newest" className="pt-6">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredChallenges
-                  .slice()
-                  .reverse()
-                  .slice(0, 6)
-                  .map((challenge) => (
-                    <ChallengeCard key={challenge.id} {...challenge} />
-                  ))}
-              </div>
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Loading challenges...</p>
+                </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredChallenges
+                    .slice()
+                    .reverse()
+                    .slice(0, 6)
+                    .map((challenge) => (
+                      <ChallengeCard key={challenge.id} {...challenge} />
+                    ))}
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="completed" className="pt-6">

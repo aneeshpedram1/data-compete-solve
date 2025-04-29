@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -9,12 +9,34 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Menu, X, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/components/ui/use-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This will be replaced with actual auth
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -48,7 +70,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            {isLoggedIn ? (
+            {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -57,16 +79,16 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link to="/profile">Profile</Link>
+                    <Link to="/profile" className="w-full">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/history">My History</Link>
+                    <Link to="/history" className="w-full">My History</Link>
                   </DropdownMenuItem>
                   {/* Admin users would see this */}
                   <DropdownMenuItem>
-                    <Link to="/admin">Admin Panel</Link>
+                    <Link to="/admin" className="w-full">Admin Panel</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -106,7 +128,7 @@ const Navbar = () => {
             <Link to="/about" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">
               About
             </Link>
-            {!isLoggedIn && (
+            {!user && (
               <>
                 <Link to="/login" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">
                   Login
@@ -116,7 +138,7 @@ const Navbar = () => {
                 </Link>
               </>
             )}
-            {isLoggedIn && (
+            {user && (
               <>
                 <Link to="/profile" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">
                   Profile
@@ -128,7 +150,7 @@ const Navbar = () => {
                   Admin Panel
                 </Link>
                 <button
-                  onClick={() => setIsLoggedIn(false)}
+                  onClick={handleSignOut}
                   className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
                 >
                   Logout
