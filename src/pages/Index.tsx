@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -50,14 +49,11 @@ const Index = () => {
               <p className="text-lg md:text-xl text-blue-100 mb-8">
                 DataComp is a platform for timed data analysis challenges. Practice analyzing real datasets, solve problems, and improve your skills.
               </p>
-              <div className="space-x-4">
+              <div>
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild>
-                  <Link to="/challenges">
+                  <Link to="/challenges" className="flex items-center justify-center">
                     Browse Challenges <ChevronRight className="ml-2 h-5 w-5" />
                   </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild>
-                  <Link to="/signup">Sign Up Free</Link>
                 </Button>
               </div>
             </div>
@@ -196,7 +192,9 @@ const Index = () => {
             Join DataComp today and start analyzing real datasets under time pressure.
           </p>
           <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild>
-            <Link to="/signup">Get Started Now</Link>
+            <Link to="/challenges" className="flex items-center justify-center">
+              Browse Challenges <ChevronRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </section>
