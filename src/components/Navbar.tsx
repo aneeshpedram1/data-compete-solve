@@ -1,22 +1,24 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
-  DropdownMenuTrigger 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   
@@ -37,6 +39,11 @@ const Navbar = () => {
       });
     }
   };
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -74,7 +81,11 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none">
-                    <User className="h-6 w-6" />
+                    {isAdmin ? (
+                      <Shield className="h-6 w-6 text-blue-600" />
+                    ) : (
+                      <User className="h-6 w-6" />
+                    )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -84,10 +95,20 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="/history" className="w-full">My History</Link>
                   </DropdownMenuItem>
-                  {/* Admin users would see this */}
-                  <DropdownMenuItem>
-                    <Link to="/admin" className="w-full">Admin Panel</Link>
-                  </DropdownMenuItem>
+                  
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link to="/admin" className="w-full flex items-center">
+                          <Shield className="mr-2 h-4 w-4 text-blue-600" />
+                          Admin Panel
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     Logout
                   </DropdownMenuItem>
@@ -146,9 +167,14 @@ const Navbar = () => {
                 <Link to="/history" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">
                   My History
                 </Link>
-                <Link to="/admin" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">
-                  Admin Panel
-                </Link>
+                {isAdmin && (
+                  <Link to="/admin" className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">
+                    <div className="flex items-center">
+                      <Shield className="mr-2 h-4 w-4 text-blue-600" />
+                      Admin Panel
+                    </div>
+                  </Link>
+                )}
                 <button
                   onClick={handleSignOut}
                   className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"

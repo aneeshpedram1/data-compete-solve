@@ -42,13 +42,15 @@ const Challenges = () => {
   const { data: challenges = [], isLoading, isError } = useQuery({
     queryKey: ["challenges"],
     queryFn: fetchChallenges,
-    onError: (error) => {
-      console.error("Failed to fetch challenges:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load challenges. Please try again later.",
-        variant: "destructive",
-      });
+    meta: {
+      onError: (error: Error) => {
+        console.error("Failed to fetch challenges:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load challenges. Please try again later.",
+          variant: "destructive",
+        });
+      }
     }
   });
 
@@ -140,7 +142,15 @@ const Challenges = () => {
               ) : filteredChallenges.length > 0 ? (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredChallenges.map((challenge) => (
-                    <ChallengeCard key={challenge.id} {...challenge} />
+                    <ChallengeCard 
+                      key={challenge.id}
+                      id={challenge.id}
+                      title={challenge.title}
+                      description={challenge.description}
+                      difficulty={challenge.difficulty as "Beginner" | "Intermediate" | "Advanced"}
+                      duration={challenge.duration}
+                      participants={challenge.participants}
+                    />
                   ))}
                 </div>
               ) : (
@@ -161,7 +171,15 @@ const Challenges = () => {
                     .sort((a, b) => b.participants - a.participants)
                     .slice(0, 6)
                     .map((challenge) => (
-                      <ChallengeCard key={challenge.id} {...challenge} />
+                      <ChallengeCard 
+                        key={challenge.id}
+                        id={challenge.id}
+                        title={challenge.title}
+                        description={challenge.description}
+                        difficulty={challenge.difficulty as "Beginner" | "Intermediate" | "Advanced"}
+                        duration={challenge.duration}
+                        participants={challenge.participants}
+                      />
                     ))}
                 </div>
               )}
@@ -179,7 +197,15 @@ const Challenges = () => {
                     .reverse()
                     .slice(0, 6)
                     .map((challenge) => (
-                      <ChallengeCard key={challenge.id} {...challenge} />
+                      <ChallengeCard 
+                        key={challenge.id}
+                        id={challenge.id}
+                        title={challenge.title}
+                        description={challenge.description}
+                        difficulty={challenge.difficulty as "Beginner" | "Intermediate" | "Advanced"}
+                        duration={challenge.duration}
+                        participants={challenge.participants}
+                      />
                     ))}
                 </div>
               )}
