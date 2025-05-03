@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ChevronRight, BarChart, Clock, Award, Database } from "lucide-react";
+import { ChevronRight, BarChart, Clock, Award, Database, Users, BookOpen } from "lucide-react";
 import ChallengeCard, { ChallengeProps } from "@/components/ChallengeCard";
 
 // Sample data for featured challenges
@@ -31,6 +31,61 @@ const featuredChallenges: ChallengeProps[] = [
     difficulty: "Advanced",
     duration: 120,
     participants: 156
+  },
+  {
+    id: "4",
+    title: "Market Basket Analysis",
+    description: "Discover product associations and patterns in retail transaction data to improve store layout and recommendations.",
+    difficulty: "Intermediate",
+    duration: 75,
+    participants: 187
+  },
+  {
+    id: "5",
+    title: "Sentiment Analysis Challenge",
+    description: "Analyze customer reviews to determine sentiment and identify improvement opportunities.",
+    difficulty: "Beginner",
+    duration: 45,
+    participants: 412
+  },
+  {
+    id: "6",
+    title: "Financial Fraud Detection",
+    description: "Identify patterns and anomalies in transaction data to flag potentially fraudulent activities.",
+    difficulty: "Advanced",
+    duration: 120,
+    participants: 132
+  }
+];
+
+// Sample data for leaderboard
+const leaderboardData = [
+  { id: 1, name: "Alex Johnson", challenges: 42, points: 3840, badge: "Data Wizard" },
+  { id: 2, name: "Maria Garcia", challenges: 38, points: 3560, badge: "Insight Master" },
+  { id: 3, name: "David Chen", challenges: 35, points: 3250, badge: "Pattern Spotter" },
+  { id: 4, name: "Priya Patel", challenges: 31, points: 2980, badge: "Analytics Pro" },
+  { id: 5, name: "James Wilson", challenges: 29, points: 2760, badge: "Data Explorer" }
+];
+
+// Leadership team data
+const leadershipTeam = [
+  {
+    name: "Dr. Sarah Mitchell",
+    role: "Founder & CEO",
+    bio: "Former data scientist with 15 years of experience in tech giants, passionate about making data analysis skills accessible to everyone.",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&auto=format&fit=crop"
+  },
+  {
+    name: "Michael Rodriguez",
+    role: "Chief Data Officer",
+    bio: "Statistics PhD with expertise in creating challenging yet accessible data problems for learners at all levels.",
+    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&h=300&auto=format&fit=crop"
+  },
+  {
+    name: "Aisha Wong",
+    role: "Head of Education",
+    bio: "Former analytics professor who specializes in transforming complex concepts into digestible learning experiences.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&auto=format&fit=crop"
   }
 ];
 
@@ -125,8 +180,112 @@ const Index = () => {
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {featuredChallenges.map((challenge) => (
+            {featuredChallenges.slice(0, 3).map((challenge) => (
               <ChallengeCard key={challenge.id} {...challenge} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Leaderboard Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900">Leaderboard</h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              Our top performers who have mastered the art of data analysis under pressure.
+            </p>
+          </div>
+          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg max-w-4xl mx-auto">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Rank</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Analyst</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Challenges</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Points</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Badge</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {leaderboardData.map((person, index) => (
+                  <tr key={person.id} className={index === 0 ? "bg-yellow-50" : ""}>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
+                      {index === 0 ? (
+                        <span className="inline-flex items-center">
+                          <Award className="h-5 w-5 text-yellow-500 mr-1" />
+                          {index + 1}
+                        </span>
+                      ) : (
+                        index + 1
+                      )}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{person.name}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.challenges}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">{person.points.toLocaleString()}</td>
+                    <td className="whitespace-nowrap px-3 py-4">
+                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                        {person.badge}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/leaderboard" className="text-blue-600 hover:text-blue-800 flex items-center justify-center">
+              View full leaderboard <ChevronRight className="h-4 w-4 ml-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-16 bg-gray-50" id="about">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-extrabold text-gray-900">About DataComp</h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+              Founded in 2022, DataComp was created to bridge the gap between academic data science education and real-world analytics challenges. 
+              Our platform offers timed, practical exercises that simulate the pressure and complexity of actual data analysis scenarios.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+              <p className="text-gray-600 mb-6">
+                DataComp's mission is to democratize access to practical data analysis experience. We believe that the best way to learn is by doing, especially under realistic conditions.
+              </p>
+              <p className="text-gray-600">
+                Whether you're a student looking to supplement your education, a professional wanting to sharpen your skills, or a job seeker preparing for interviews, DataComp provides the practice environment you need to excel.
+              </p>
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <img 
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                alt="Team collaboration" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-10">Leadership Team</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            {leadershipTeam.map((member, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <img 
+                  src={member.image} 
+                  alt={member.name} 
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-6">
+                  <h4 className="text-xl font-semibold text-gray-900">{member.name}</h4>
+                  <p className="text-blue-600 font-medium mb-3">{member.role}</p>
+                  <p className="text-gray-600">{member.bio}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
