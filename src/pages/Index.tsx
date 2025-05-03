@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -49,8 +50,8 @@ const Index = () => {
               <p className="text-lg md:text-xl text-blue-100 mb-8">
                 DataComp is a platform for timed data analysis challenges. Practice analyzing real datasets, solve problems, and improve your skills.
               </p>
-              <div>
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild>
+              <div className="relative z-10">
+                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-violet-500" asChild>
                   <Link to="/challenges" className="flex items-center justify-center">
                     Browse Challenges <ChevronRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -66,7 +67,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block absolute bottom-0 inset-x-0">
+        <div className="hidden lg:block absolute bottom-0 inset-x-0 z-0">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="fill-white">
             <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,128C672,128,768,160,864,176C960,192,1056,192,1152,170.7C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>
@@ -191,11 +192,13 @@ const Index = () => {
           <p className="text-xl text-blue-100 mb-8">
             Join DataComp today and start analyzing real datasets under time pressure.
           </p>
-          <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild>
-            <Link to="/challenges" className="flex items-center justify-center">
-              Browse Challenges <ChevronRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="relative z-10">
+            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-violet-500" asChild>
+              <Link to="/challenges" className="flex items-center justify-center">
+                Browse Challenges <ChevronRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
