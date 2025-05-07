@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
@@ -178,7 +177,7 @@ const Challenges = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-blue-700 to-purple-700 text-white py-12">
+        <section className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:flex md:items-center md:justify-between">
               <div className="md:max-w-2xl">
@@ -190,11 +189,6 @@ const Challenges = () => {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="hidden lg:block absolute bottom-0 inset-x-0 z-0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="fill-white">
-              <path d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,128C672,128,768,160,864,176C960,192,1056,192,1152,170.7C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-            </svg>
           </div>
         </section>
 
@@ -274,7 +268,7 @@ const Challenges = () => {
                 <SelectItem value="all">All Durations</SelectItem>
                 <SelectItem value="short">Short (≤ 60 min)</SelectItem>
                 <SelectItem value="medium">Medium (61-90 min)</SelectItem>
-                <SelectItem value="long">Long (&gt; 90 min)</SelectItem>
+                <SelectItem value="long">&gt; 90 min</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -492,4 +486,3 @@ const Challenges = () => {
 };
 
 export default Challenges;
-

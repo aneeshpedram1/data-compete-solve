@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -88,7 +87,7 @@ const Leaderboard = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-blue-700 to-purple-700 text-white py-12">
+        <section className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:flex md:items-center md:justify-between">
               <div className="md:max-w-2xl">
