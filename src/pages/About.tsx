@@ -38,7 +38,7 @@ const About = () => {
             </p>
             
             <p className="text-lg text-gray-700 mb-6">
-              Launched in 2022, our platform was born from the realization that while theoretical knowledge is important, the ability to analyze data under pressure and with time constraints is what truly differentiates exceptional analysts. Whether you're preparing for job interviews, looking to enhance your professional skills, or simply passionate about data, DataComp offers the perfect environment to test and improve your abilities.
+              Launched in 2025, our platform was born from the realization that while theoretical knowledge is important, the ability to analyze data under pressure and with time constraints is what truly differentiates exceptional analysts. Whether you're preparing for job interviews, looking to enhance your professional skills, or simply passionate about data, DataComp offers the perfect environment to test and improve your abilities.
             </p>
             
             <p className="text-lg text-gray-700 mb-10">
