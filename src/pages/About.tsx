@@ -8,22 +8,10 @@ import { ChevronRight } from "lucide-react";
 // Leadership team data
 const leadershipTeam = [
   {
-    name: "Dr. Sarah Mitchell",
-    role: "Founder & CEO",
-    bio: "Former data scientist with 15 years of experience in tech giants, passionate about making data analysis skills accessible to everyone.",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&auto=format&fit=crop"
-  },
-  {
-    name: "Michael Rodriguez",
-    role: "Chief Data Officer",
-    bio: "Statistics PhD with expertise in creating challenging yet accessible data problems for learners at all levels.",
-    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&h=300&auto=format&fit=crop"
-  },
-  {
-    name: "Aisha Wong",
-    role: "Head of Education",
-    bio: "Former analytics professor who specializes in transforming complex concepts into digestible learning experiences.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&auto=format&fit=crop"
+    name: "Aneesh Pedram",
+    role: "Founder",
+    bio: "Master of Data Science @ Deakin University",
+    image: "/lovable-uploads/578262b3-14bf-4fae-a06f-74b77d6f4597.png"
   }
 ];
 
@@ -88,21 +76,19 @@ const About = () => {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-10">Leadership Team</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            {leadershipTeam.map((member, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-6">
-                  <h4 className="text-xl font-semibold text-gray-900">{member.name}</h4>
-                  <p className="text-blue-600 font-medium mb-3">{member.role}</p>
-                  <p className="text-gray-600">{member.bio}</p>
-                </div>
+          <div className="flex justify-center">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-md">
+              <img 
+                src={leadershipTeam[0].image} 
+                alt={leadershipTeam[0].name} 
+                className="w-full h-96 object-cover object-center"
+              />
+              <div className="p-6">
+                <h4 className="text-xl font-semibold text-gray-900">{leadershipTeam[0].name}</h4>
+                <p className="text-blue-600 font-medium mb-3">{leadershipTeam[0].role}</p>
+                <p className="text-gray-600">{leadershipTeam[0].bio}</p>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
