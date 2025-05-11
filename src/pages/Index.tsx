@@ -229,7 +229,7 @@ const Index = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold text-gray-900">About DataComp</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-              Founded in 2022, DataComp was created to bridge the gap between academic data science education and real-world analytics challenges. 
+              Founded in 2025, DataComp was created to bridge the gap between academic data science education and real-world analytics challenges. 
               Our platform offers timed, practical exercises that simulate the pressure and complexity of actual data analysis scenarios.
             </p>
           </div>
