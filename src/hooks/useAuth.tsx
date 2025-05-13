@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, cleanupAuthState } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 
 export function useAuth() {
@@ -20,7 +20,10 @@ export function useAuth() {
         
         // Check if user is admin
         if (session?.user) {
-          checkIfUserIsAdmin(session.user.id);
+          // Use setTimeout to prevent potential deadlocks
+          setTimeout(() => {
+            checkIfUserIsAdmin(session.user.id);
+          }, 0);
         } else {
           setIsAdmin(false);
         }
@@ -62,13 +65,35 @@ export function useAuth() {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setIsAdmin(false);
-    navigate('/login');
+    try {
+      // Clean up auth state first
+      cleanupAuthState();
+      
+      // Attempt global sign out
+      await supabase.auth.signOut({ scope: 'global' });
+      setIsAdmin(false);
+      
+      // Force page reload for a clean state
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error during sign out:', error);
+      // Force navigation even if there was an error
+      window.location.href = '/login';
+    }
   };
 
   const adminLogin = async (email: string, password: string) => {
     try {
+      // Clean up existing state first
+      cleanupAuthState();
+      
+      // Attempt global sign out first
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        // Continue even if this fails
+      }
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -100,12 +125,40 @@ export function useAuth() {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
+      
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     user,
     session,
     loading,
     signOut,
     isAdmin,
-    adminLogin
+    adminLogin,
+    resetPassword,
+    updatePassword
   };
 }

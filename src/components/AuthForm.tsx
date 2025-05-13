@@ -9,7 +9,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Github, Mail, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/hooks/useAuth";
 
 interface AuthFormProps {
