@@ -20,11 +20,14 @@ const ResetPassword = () => {
   useEffect(() => {
     // Check if we have the hash fragment in the URL (indicates we came from the reset email)
     const hash = window.location.hash;
+    console.log("URL hash fragment present:", !!hash);
     setHasSessionHash(!!hash);
     
     // Listen for auth state changes to detect when a user accesses this page via a recovery link
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth event:", event);
       if (event === 'PASSWORD_RECOVERY') {
+        console.log("Password recovery event detected");
         setHasSessionHash(true);
       }
     });
@@ -49,6 +52,7 @@ const ResetPassword = () => {
     setIsLoading(true);
     
     try {
+      console.log("Attempting to update password");
       const { error } = await supabase.auth.updateUser({
         password: password
       });
@@ -65,6 +69,7 @@ const ResetPassword = () => {
         navigate("/login");
       }, 2000);
     } catch (error: any) {
+      console.error("Password update error:", error);
       toast({
         title: "Error",
         description: error.message || "An error occurred. Please try again.",
